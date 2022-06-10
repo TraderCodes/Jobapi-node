@@ -1,14 +1,13 @@
 // get models
 const User = require('../models/User');
 const { StatusCodes } = require('http-status-codes');
-const { BadRequestError } = require('../errors');
+const jwt = require('jsonwebtoken');
+
 const bcrypt = require('bcryptjs');
 const register = async (req, res) => {
-  const { password, name, email } = req.body;
-
-
-  const user = await User.create({ ...req.body});
-  res.status(StatusCodes.CREATED).json(user);
+  const user = await User.create({ ...req.body });
+  const token = json.sign({userId:user._id,name:user.name},'jewSecret',{expiresIn:'30d'})
+  res.status(StatusCodes.CREATED).json({user:{name:user.name},token});
 };
 const login = async (req, res) => {
   res.send('login user');
