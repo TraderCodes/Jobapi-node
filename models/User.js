@@ -34,6 +34,6 @@ UserSchema.pre('save', async function () {
 
 });
 UserSchema.methods.createJWT = function (){
-  return jet.sign({userId:this._Id,name:this.name},'jwtSecret',{expiresIN:'30d'})
+  return jwt.sign({userId:this._id,name:this.name},process.env.JWT_SECRET,{expiresIn:'30d'})
 }
 module.exports = mongoose.model('User', UserSchema);
