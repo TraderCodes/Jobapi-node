@@ -14,12 +14,18 @@ const login = async (req, res) => {
     throw new BadRequestError('please provide a valid email and pass');
   }
   const user = await User.findOne({ email });
+
   if (!user) {
     throw new UnauthenticatedError('Invalid Credentials');
   }
-  // CREATE TOKEN IF USER FOUND   
-  const token = user.createJWT()
-  res.status(StatusCodes.OK).json({user:{name:user.name},token})
+  const isPasswordCorrect = await user.comparePassword(password);
+  if (!isPasswordCorrect) {
+    throw new UnauthenticatedError('Invalid credit');
+  }
+
+  // CREATE TOKEN IF USER FOUND
+  const token = user.createJWT();
+  res.status(StatusCodes.OK).json({ user: { name: user.name }, token });
 };
 
 module.exports = {
